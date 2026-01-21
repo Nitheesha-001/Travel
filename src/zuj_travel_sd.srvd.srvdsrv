@@ -1,0 +1,6 @@
+@EndUserText.label: 'Service Definition for Travel'
+define service ZUJ_TRAVEL_SD {
+  expose ZUJ_TRAVEL_C;
+  expose ZUJ_BOOKING_C;
+  expose ZUJ_BOOKSUPPLY_C;
+}

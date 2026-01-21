@@ -1,0 +1,111 @@
+managed implementation in class zbp_uj_travel_i unique;
+strict ( 2 );
+
+with draft;
+define behavior for ZUJ_TRAVEL_I alias Travel
+persistent table zuj_travel
+draft table zuj_df_travel
+lock master
+total etag LastChangedAt
+authorization master ( global, instance )
+etag master LocalLastChangedAt
+{
+  create ( authorization : global );
+  update;
+  delete;
+  field ( numbering : managed, readonly ) TravelUuid;
+  field ( readonly )TravelId;
+  association _Booking { create; with draft; }
+
+  draft action Edit;
+  draft action Resume;
+  draft action Discard;
+  draft action Activate optimized;
+  draft determine action Prepare;
+
+
+  determination setTravelId on save {create; update;}
+  determination setOverallStatus on modify { create; update; }
+
+  // Mapping for Travel Details
+  mapping for zuj_travel
+    {
+      TravelUuid         = travel_uuid;
+      TravelId           = travel_id;
+      AgencyId           = agency_id;
+      CustomerId         = customer_id;
+      BeginDate          = begin_date;
+      EndDate            = end_date;
+      BookingFee         = booking_fee;
+      TotalPrice         = total_price;
+      CurrencyCode       = currency_code;
+      Description        = description;
+      OverallStatus      = overall_status;
+      LocalCreatedBy     = local_created_by;
+      LocalCreatedAt     = local_created_at;
+      LocalLastChangedBy = local_last_changed_by;
+      LocalLastChangedAt = local_last_changed_at;
+      LastChangedAt      = last_changed_at;
+    }
+}
+
+define behavior for ZUJ_BOOKING_I alias Booking
+persistent table zuj_booking
+draft table zuj_df_booking
+lock dependent by _Travel
+authorization dependent by _Travel
+etag master LocalLastChangedAt
+{
+  update;
+  delete;
+  field ( readonly ) TravelUuid;
+  field ( numbering : managed, readonly ) BookingUuid;
+  association _Travel { with draft; }
+  association _BookingSupplement { create; with draft; }
+
+  // Mapping for Booking Details
+  mapping for zuj_booking
+    {
+      BookingUuid        = booking_uuid;
+      TravelUuid         = parent_uuid;
+      BookingId          = booking_id;
+      BookingDate        = booking_date;
+      CustomerId         = customer_id;
+      CarrierId          = carrier_id;
+      ConnectionId       = connection_id;
+      FlightDate         = flight_date;
+      FlightPrice        = flight_price;
+      CurrencyCode       = currency_code;
+      BookingStatus      = booking_status;
+      LocalLastChangedAt = local_last_changed_at;
+    }
+}
+
+define behavior for ZUJ_BKSUPPL_I alias Bookingsuppl
+persistent table zuj_bksuppl
+draft table zuj_df_bksuppl
+lock dependent by _Travel
+authorization dependent by _Travel
+etag master LocalLastChangedAt
+{
+  update;
+  delete;
+  field ( readonly ) TravelUuid, BookingUuid;
+  field ( numbering : managed, readonly ) BooksupplUuid;
+  association _Travel { with draft; }
+  association _Booking { with draft; }
+
+  // Mapping for Booking suppliments Details
+  mapping for zuj_bksuppl
+    {
+      BooksupplUuid       = booksuppl_uuid;
+      TravelUuid          = root_uuid;
+      BookingUuid         = parent_uuid;
+      BookingSupplementId = booking_supplement_id;
+      SupplementId        = supplement_id;
+      Price               = price;
+      CurrencyCode        = currency_code;
+      LocalLastChangedAt  = local_last_changed_at;
+    }
+
+}
