@@ -1,6 +1,7 @@
 projection;
 strict ( 2 );
 use draft;
+use side effects;
 
 define behavior for ZUJ_TRAVEL_C alias Travel
 use etag
@@ -15,8 +16,13 @@ use etag
   use action Prepare;
   use action Activate;
 
+  use action acceptTravel;
+  use action rejectTravel;
+  use action deductdiscount;
+  use function GetDefaultsFordeductDiscount;
 
-  use association _Booking { create; with draft; }
+
+  use association _Booking {create; with draft;}
 }
 
 define behavior for ZUJ_BOOKING_C alias Booking
@@ -24,8 +30,8 @@ define behavior for ZUJ_BOOKING_C alias Booking
   use update;
   use delete;
 
-  use association _Travel { with draft; }
-  use association _BookingSupplement { create; with draft; }
+  use association _Travel {with draft;}
+  use association _BookingSupplement {create; with draft;}
 }
 
 define behavior for ZUJ_BOOKSUPPLY_C alias Bookingsuppl
@@ -33,6 +39,6 @@ define behavior for ZUJ_BOOKSUPPLY_C alias Bookingsuppl
   use update;
   use delete;
 
-  use association _Travel { with draft; }
-  use association _Booking { with draft; }
+  use association _Travel {with draft;}
+  use association _Booking {with draft;}
 }

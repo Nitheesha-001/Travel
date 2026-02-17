@@ -14,7 +14,7 @@ etag master LocalLastChangedAt
   update;
   delete;
   field ( numbering : managed, readonly ) TravelUuid;
-  field ( readonly )TravelId;
+  field ( readonly ) TravelId;
   association _Booking { create; with draft; }
 
   draft action Edit;
@@ -24,8 +24,22 @@ etag master LocalLastChangedAt
   draft determine action Prepare;
 
 
-  determination setTravelId on save {create; update;}
+  determination setTravelId on save { create; update; }
   determination setOverallStatus on modify { create; update; }
+
+  //   Validations
+  validation validatecustomer on save { create; field CustomerId; }
+  validation validateAgency on save { create; field AgencyId; }
+  validation validateDates on save { create; field BeginDate, EndDate ;}
+
+  // Accept and Reject travel
+  action acceptTravel result [1] $self;
+  action rejectTravel result [1] $self;
+
+  action deductdiscount parameter ZUJ_A_DISCOUNT result [1] $self { default function GetDefaultsFordeductDiscount; }
+
+  determination calculateTotalprice on modify { create; field BookingFee, CurrencyCode; }
+  internal action recalcTotalprice;
 
   // Mapping for Travel Details
   mapping for zuj_travel
@@ -58,10 +72,23 @@ etag master LocalLastChangedAt
 {
   update;
   delete;
-  field ( readonly ) TravelUuid;
+  field ( readonly ) TravelUuid, BookingId, BookingDate;
   field ( numbering : managed, readonly ) BookingUuid;
   association _Travel { with draft; }
   association _BookingSupplement { create; with draft; }
+
+  determination setbookingid on save { create; }
+  determination setbookingdate on save { create; }
+
+  determination calculateTotalprice on modify { create; field FlightPrice, CurrencyCode; }
+
+  side effects
+  {
+
+    field FlightPrice affects field _Travel.TotalPrice;
+
+  }
+
 
   // Mapping for Booking Details
   mapping for zuj_booking
@@ -90,10 +117,22 @@ etag master LocalLastChangedAt
 {
   update;
   delete;
-  field ( readonly ) TravelUuid, BookingUuid;
+  field ( readonly ) TravelUuid, BookingUuid, BookingSupplementId;
   field ( numbering : managed, readonly ) BooksupplUuid;
   association _Travel { with draft; }
   association _Booking { with draft; }
+
+  determination Setbookingsupplementid on save { create; }
+
+  determination calculateTotalprice on modify { create; field Price, CurrencyCode; }
+
+  side effects
+  {
+
+    field Price affects field _Travel.TotalPrice;
+
+  }
+
 
   // Mapping for Booking suppliments Details
   mapping for zuj_bksuppl
