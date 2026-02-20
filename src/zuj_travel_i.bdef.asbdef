@@ -15,13 +15,19 @@ etag master LocalLastChangedAt
   delete;
   field ( numbering : managed, readonly ) TravelUuid;
   field ( readonly ) TravelId;
+  field ( features : instance ) BookingFee;
   association _Booking { create; with draft; }
 
   draft action Edit;
   draft action Resume;
   draft action Discard;
   draft action Activate optimized;
-  draft determine action Prepare;
+  draft determine action Prepare
+  {
+  validation validatecustomer;
+  validation validateAgency;
+  validation validateDates;
+  }
 
 
   determination setTravelId on save { create; update; }
@@ -33,13 +39,30 @@ etag master LocalLastChangedAt
   validation validateDates on save { create; field BeginDate, EndDate ;}
 
   // Accept and Reject travel
-  action acceptTravel result [1] $self;
-  action rejectTravel result [1] $self;
+  action (features : instance ) acceptTravel result [1] $self;
+  action (features : instance ) rejectTravel result [1] $self;
 
-  action deductdiscount parameter ZUJ_A_DISCOUNT result [1] $self { default function GetDefaultsFordeductDiscount; }
+  action (features : instance ) deductdiscount parameter ZUJ_A_DISCOUNT result [1] $self { default function GetDefaultsFordeductDiscount; }
 
   determination calculateTotalprice on modify { create; field BookingFee, CurrencyCode; }
   internal action recalcTotalprice;
+
+  determine action validateCustomerId { validation validatecustomer; }
+  determine action validateAgencyId { validation validateAgency; }
+  determine action validateDatesValue { validation validateDates; }
+
+
+    side effects
+  {
+
+    field BookingFee affects field TotalPrice;
+
+    determine action validateCustomerId executed on field CustomerId affects messages;
+    determine action validateAgencyId executed on field AgencyId affects messages;
+    determine action validateDatesValue executed on field BeginDate, field EndDate affects messages;
+
+  }
+
 
   // Mapping for Travel Details
   mapping for zuj_travel

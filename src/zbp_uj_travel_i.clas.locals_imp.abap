@@ -230,6 +230,8 @@ CLASS lhc_Travel DEFINITION INHERITING FROM cl_abap_behavior_handler.
 
     METHODS validateDates FOR VALIDATE ON SAVE
       IMPORTING keys FOR Travel~validateDates.
+    METHODS get_instance_features FOR INSTANCE FEATURES
+      IMPORTING keys REQUEST requested_features FOR Travel RESULT result.
 
 ENDCLASS.
 
@@ -539,11 +541,15 @@ CLASS lhc_Travel IMPLEMENTATION.
     INTO TABLE @DATA(valid_customers).
 
     LOOP AT travels INTO DATA(travel).
+      APPEND VALUE #( %tky = travel-%tky
+                      %state_area = 'VALIDATE_CUSTOMER'
+                      ) TO reported-travel.
 
       IF travel-CustomerId IS NOT INITIAL AND NOT line_exists( valid_customers[ customer_id = travel-CustomerId ] ) .
 
         APPEND VALUE #( %tky = travel-%tky ) TO failed-travel.
         APPEND VALUE #( %tky = travel-%tky
+                        %state_area = 'VALIDATE_CUSTOMER'
                         %msg = new_message_with_text(
                         severity = if_abap_behv_message=>severity-error
                         text = | { travel-CustomerId } Customer does not exist |
@@ -561,7 +567,7 @@ CLASS lhc_Travel IMPLEMENTATION.
 
   METHOD validateAgency.
 
-READ ENTITIES OF zuj_travel_i IN LOCAL MODE
+    READ ENTITIES OF zuj_travel_i IN LOCAL MODE
     ENTITY Travel
     FIELDS ( AgencyId )
     WITH CORRESPONDING #( keys )
@@ -576,16 +582,20 @@ READ ENTITIES OF zuj_travel_i IN LOCAL MODE
     INTO TABLE @DATA(valid_agencies).
 
     LOOP AT travels INTO DATA(travel).
+      APPEND VALUE #( %tky = travel-%tky
+                       %state_area = 'VALIDATE_AGENT'
+                       ) TO reported-travel.
 
       IF travel-AgencyId IS NOT INITIAL AND NOT line_exists( valid_agencies[ agency_id = travel-AgencyId ] ) .
 
         APPEND VALUE #( %tky = travel-%tky ) TO failed-travel.
         APPEND VALUE #( %tky = travel-%tky
+                        %state_area = 'VALIDATE_AGENT'
                         %msg = new_message_with_text(
                         severity = if_abap_behv_message=>severity-error
                         text = |{ travel-AgencyId } Agent does not exist|
                          )
-                         %element-customerid = if_abap_behv=>mk-on
+                         %element-AgencyId = if_abap_behv=>mk-on
                           ) TO reported-travel.
       ENDIF.
 
@@ -596,6 +606,89 @@ READ ENTITIES OF zuj_travel_i IN LOCAL MODE
 
   METHOD validateDates.
 
+    READ ENTITIES OF zuj_travel_i IN LOCAL MODE
+    ENTITY Travel
+    FIELDS ( BeginDate EndDate )
+    WITH CORRESPONDING #( keys )
+    RESULT DATA(travels) .
+
+    LOOP AT travels INTO DATA(travel).
+      APPEND VALUE #( %tky = travel-%tky
+                         %state_area = 'VALIDATE_DATES'
+                         ) TO reported-travel.
+
+      IF travel-BeginDate IS INITIAL.
+
+        APPEND VALUE #( %tky = travel-%tky ) TO failed-travel.
+        APPEND VALUE #( %tky = travel-%tky
+                        %state_area = 'VALIDATE_DATES'
+                        %msg = new_message_with_text(
+                        severity = if_abap_behv_message=>severity-error
+                        text = |Begin date cannot be empty|
+                         )
+                         %element-BeginDate = if_abap_behv=>mk-on
+                          ) TO reported-travel.
+
+      ENDIF.
+
+      IF travel-EndDate IS INITIAL.
+
+        APPEND VALUE #( %tky = travel-%tky ) TO failed-travel.
+        APPEND VALUE #( %tky = travel-%tky
+                        %state_area = 'VALIDATE_DATES'
+                        %msg = new_message_with_text(
+                        severity = if_abap_behv_message=>severity-error
+                        text = |End date cannot be empty|
+                         )
+                         %element-EndDate = if_abap_behv=>mk-on
+                          ) TO reported-travel.
+      ENDIF.
+
+      IF travel-EndDate < travel-BeginDate AND travel-BeginDate IS NOT INITIAL
+                                           AND travel-EndDate IS NOT INITIAL.
+
+        APPEND VALUE #( %tky = travel-%tky ) TO failed-travel.
+        APPEND VALUE #( %tky = travel-%tky
+                        %state_area = 'VALIDATE_DATES'
+                        %msg = new_message_with_text(
+                        severity = if_abap_behv_message=>severity-error
+                        text = |End date must be greater than or equal to the start date|
+                         )
+                         %element-BeginDate = if_abap_behv=>mk-on
+                         %element-EndDate = if_abap_behv=>mk-on
+                          ) TO reported-travel.
+      ENDIF.
+
+    ENDLOOP.
+
+  ENDMETHOD.
+
+  METHOD get_instance_features.
+
+    READ ENTITIES OF zuj_travel_i IN LOCAL MODE
+    ENTITY Travel
+    FIELDS ( OverallStatus )
+    WITH CORRESPONDING #( keys )
+    RESULT DATA(travels).
+
+    result = VALUE #( FOR ls_travel IN travels
+                       ( %tky = ls_travel-%tky
+                       %field-BookingFee = COND #( WHEN ls_travel-OverallStatus = 'A'
+                                                   THEN if_abap_behv=>fc-f-read_only
+                                                   ELSE if_abap_behv=>fc-f-unrestricted  )
+
+                        %action-acceptTravel = COND #(  WHEN ls_travel-OverallStatus = 'A'
+                                                        THEN if_abap_behv=>fc-o-disabled
+                                                        ELSE if_abap_behv=>fc-o-enabled )
+
+                        %action-rejectTravel = COND #( WHEN ls_travel-OverallStatus = 'R'
+                                                        THEN if_abap_behv=>fc-o-disabled
+                                                        ELSE if_abap_behv=>fc-o-enabled )
+
+                        %action-deductdiscount = COND #( WHEN ls_travel-OverallStatus = 'A'
+                                                         THEN if_abap_behv=>fc-o-disabled
+                                                         ELSE if_abap_behv=>fc-o-enabled )
+                       )   ).
 
 
   ENDMETHOD.
