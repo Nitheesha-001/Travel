@@ -2,12 +2,14 @@
 @EndUserText.label: 'Booking supply Consumption Entity'
 @Metadata.ignorePropagatedAnnotations: true
 @Metadata.allowExtensions: true
-@VDM.viewType: #CONSUMPTION
+@Search.searchable: true
+//@VDM.viewType: #CONSUMPTION
 define view entity ZUJ_BOOKSUPPLY_C as projection on ZUJ_BKSUPPL_I
 {
     key BooksupplUuid,
     TravelUuid,
     BookingUuid,
+    @Search.defaultSearchElement: true
     BookingSupplementId,    
     SupplementId,
     @Semantics.amount.currencyCode: 'CurrencyCode'

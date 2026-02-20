@@ -1,22 +1,32 @@
 @Metadata.layer: #CORE
+ @UI: {
+    headerInfo: {
+        typeName: 'Booking',
+        typeNamePlural: 'Booking List',
+        title: {
+                   type: #STANDARD,
+                   label: 'Booking',
+                   value: 'BookingId'
+                }}}
+//                                 
 annotate entity ZUJ_BOOKING_C with
 {
 
-@UI.facet: [{ id: 'Booking',
-              purpose: #STANDARD,
-              type: #IDENTIFICATION_REFERENCE,
-              label: 'Booking',
-              position: 10
-              },
-              
-              {  
-              id: 'Bookingsupplement',
-              purpose: #STANDARD,
-              type: #LINEITEM_REFERENCE,
-              targetElement: '_BookingSupplement',
-              label: 'BookingSupplement',
-              position: 20
- }]
+  @UI.facet: [{ id: 'Booking',
+                purpose: #STANDARD,
+                type: #IDENTIFICATION_REFERENCE,
+                label: 'Booking',
+                position: 10
+                },
+
+                {
+                id: 'Bookingsupplement',
+                purpose: #STANDARD,
+                type: #LINEITEM_REFERENCE,
+                targetElement: '_BookingSupplement',
+                label: 'BookingSupplement',
+                position: 20
+   }]
   @UI.hidden: true
   BookingUuid;
   @UI.hidden: true
@@ -37,16 +47,23 @@ annotate entity ZUJ_BOOKING_C with
 
   @UI.lineItem: [{ position: 40, importance: #HIGH }]
   @UI.identification: [{ position: 40, importance: #HIGH }]
-  @Consumption.valueHelpDefinition: [{ entity:{ name: '/DMO/I_Flight_StdVH', element: 'AirlineID' } }]
+//  @Consumption.valueHelpDefinition: [{ entity: { name: '/DMO/I_Carrier',element: 'airlineid' } }]
+    @Consumption.valueHelpDefinition: [{ entity:{ name: '/DMO/I_Flight_StdVH', element: 'AirlineID' } }]
   CarrierId;
 
   @UI.lineItem: [{ position: 50, importance: #HIGH }]
   @UI.identification: [{ position: 50, importance: #HIGH }]
-  @Consumption.valueHelpDefinition: [{ entity:{ name: '/DMO/I_Flight_StdVH', element: 'ConnectionID' } ,
-                                                  additionalBinding: [{ localElement:'CarrierId', element: 'AirlineID', usage: #FILTER_AND_RESULT },
-                                                  { localElement: 'FlightDate', element: 'FlightDate', usage: #RESULT },
-                                                  { localElement: 'FlightPrice', element: 'Price', usage: #RESULT },
-                                                  { localElement: 'CurrencyCode', element: 'CurrencyCode', usage: #RESULT }] }]
+//  @Consumption.valueHelpDefinition: [{ entity: { name: '/DMO/I_Flight',element: 'ConnectionID'},
+//                                       additionalBinding: [{ element: 'ConnectionID',localElement: 'ConnectionId' },
+//                                                           { element: 'AirlineID', localElement: 'CarrierId'},
+//                                                           { element: 'CurrencyCode', localElement: 'CurrencyCode'},
+//                                                           { element: 'Price',localElement: 'FlightPrice'  } ]}]
+
+    @Consumption.valueHelpDefinition: [{ entity:{ name: '/DMO/I_Flight_StdVH', element: 'ConnectionID' } ,
+                                                    additionalBinding: [{ localElement:'CarrierId', element: 'AirlineID', usage: #FILTER_AND_RESULT },
+                                                    { localElement: 'FlightDate', element: 'FlightDate', usage: #RESULT },
+                                                    { localElement: 'FlightPrice', element: 'Price', usage: #RESULT },
+                                                    { localElement: 'CurrencyCode', element: 'CurrencyCode', usage: #RESULT }] }]
   ConnectionId;
 
   @UI.lineItem: [{ position: 60, importance: #HIGH }]
@@ -61,7 +78,7 @@ annotate entity ZUJ_BOOKING_C with
   @UI.lineItem: [{ position: 80, importance: #HIGH }]
   @UI.identification: [{ position: 80, importance: #HIGH }]
   BookingStatus;
-  
+
   //LocalLastChangedAt;
   //  /* Associations */
   //  _BookingSupplement;
