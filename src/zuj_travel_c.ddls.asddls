@@ -7,6 +7,7 @@ provider contract transactional_query as projection on ZUJ_TRAVEL_I
 {
     key TravelUuid,
     TravelId,
+    @Consumption.filter: { selectionType: #RANGE }
     AgencyId,
     CustomerId,
     BeginDate,

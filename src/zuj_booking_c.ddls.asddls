@@ -10,8 +10,8 @@ define view entity ZUJ_BOOKING_C as projection on ZUJ_BOOKING_I
     TravelUuid,
     @Search.defaultSearchElement: true
     BookingId,
-    BookingDate,
-    CustomerId,
+    BookingDate,   
+    CustomerId,   
     CarrierId,
     ConnectionId,
     FlightDate,
