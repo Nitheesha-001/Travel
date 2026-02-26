@@ -1,0 +1,73 @@
+managed implementation in class zbp_uj_excel_user_i unique;
+strict ( 2 );
+
+with draft;
+define behavior for ZUJ_EXCEL_USER_I alias XLHead
+persistent table zuj_excel_user
+draft table zuj_excel_user_d
+early numbering
+lock master
+total etag LastChangedAt
+authorization master ( global, instance )
+etag master LocalLastChangedAt
+{
+  create ( authorization : global );
+  update;
+  delete;
+  field ( readonly ) EndUser, FileId;
+  association _XLData { create; with draft; }
+
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Edit;
+  draft action Resume;
+  draft determine action Prepare;
+
+
+  determination fillfilestatus on modify { field EndUser;}
+
+  mapping for zuj_excel_user
+    {
+      EndUser            = end_user;
+      FileId             = file_id;
+      FileStatus         = file_status;
+      Attachment         = attachment;
+      Mimetype           = mimetype;
+      Filename           = filename;
+      LocalCreatedBy     = local_created_by;
+      LocalCreatedAt     = local_created_at;
+      LocalLastChangedBy = local_last_changed_by;
+      LocalLastChangedAt = local_last_changed_at;
+      LastChangedAt      = last_changed_at;
+    }
+}
+
+define behavior for ZUJ_EXCEL_DATA_I alias XLData
+persistent table zuj_excel_data
+draft table zuj_excel_data_d
+lock dependent by _XLUser
+authorization dependent by _XLUser
+//etag master <field_name>
+{
+  update;
+  delete;
+  field ( readonly ) EndUser, FileId, Line_No,
+  PoNumber, PoItem, GrQuantity, UnitOfMeasure, SiteId, HeaderText;
+  field ( numbering : managed, readonly ) Line_Id;
+  association _XLUser { with draft; }
+
+
+  mapping for zuj_excel_data
+    {
+      EndUser       = end_user;
+      FileId        = file_id;
+      Line_Id       = line_id;
+      Line_No       = line_no;
+      PoNumber      = po_number;
+      PoItem        = po_item;
+      GrQuantity    = gr_quantity;
+      UnitOfMeasure = unit_of_measure;
+      SiteId        = site_id;
+      HeaderText    = header_text;
+    }
+}

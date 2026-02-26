@@ -25,7 +25,8 @@ define view entity ZUJ_BKSUPPL_I
       price                 as Price,
       currency_code         as CurrencyCode,
       local_last_changed_at as LocalLastChangedAt,
-      
+
+
       _Booking,
       _Travel
 }

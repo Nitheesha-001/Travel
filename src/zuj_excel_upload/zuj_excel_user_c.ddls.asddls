@@ -1,6 +1,7 @@
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Consumption Entity for User'
 @Metadata.ignorePropagatedAnnotations: true
+@Metadata.allowExtensions: true
 define root view entity ZUJ_EXCEL_USER_C
   provider contract transactional_query
   as projection on ZUJ_EXCEL_USER_I
@@ -23,5 +24,5 @@ define root view entity ZUJ_EXCEL_USER_C
       LocalLastChangedAt,
       LastChangedAt,
       /* Associations */
-      _XLData
+      _XLData: redirected to composition child ZUJ_EXCEL_DATA_C
 }

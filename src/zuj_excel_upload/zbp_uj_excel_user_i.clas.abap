@@ -1,0 +1,5 @@
+CLASS zbp_uj_excel_user_i DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF zuj_excel_user_i.
+ENDCLASS.
+
+CLASS zbp_uj_excel_user_i IMPLEMENTATION.
+ENDCLASS.
