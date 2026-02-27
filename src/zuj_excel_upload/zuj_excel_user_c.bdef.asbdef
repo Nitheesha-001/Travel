@@ -8,6 +8,7 @@ define behavior for ZUJ_EXCEL_USER_C alias XLHead
   use update;
   use delete;
 
+//use action
   use action Activate;
   use action Discard;
   use action Edit;

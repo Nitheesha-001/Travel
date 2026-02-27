@@ -4,6 +4,7 @@
     title: { type: #STANDARD, value: 'FileId' } }
 annotate entity ZUJ_EXCEL_USER_C with
 {
+
   @UI.facet: [
     { id: 'idEndUser',                purpose: #HEADER,   position: 10,
     type: #DATAPOINT_REFERENCE,     targetQualifier: 'tqEndUser'
@@ -25,12 +26,13 @@ annotate entity ZUJ_EXCEL_USER_C with
 
 
   @UI.dataPoint: { qualifier: 'tqEndUser', title: 'Person Responsible' }
-  @UI.identification: [{ type: #FOR_ACTION, label: 'Upload Data', dataAction: 'uploadFile' }]
+  @UI.identification: [{ type: #FOR_ACTION, label: 'Upload Data', dataAction: 'uploadExcelData' }]
   EndUser;
   // FileId;
   @UI.lineItem: [{ position: 20, label: 'File Status' }]
   @UI.dataPoint: { qualifier: 'tqStatus', title: 'File Status' }
   FileStatus;
+  //@UI.lineItem: [{ position: 30, label: 'attacment' }]
   @UI.identification: [{ position: 30, label: 'Select Excel to Upload' }]
   Attachment;
   @UI.hidden: true

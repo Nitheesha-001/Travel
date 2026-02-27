@@ -23,7 +23,6 @@ etag master LocalLastChangedAt
   draft action Resume;
   draft determine action Prepare;
 
-
   determination fillfilestatus on modify { field EndUser;}
 
   mapping for zuj_excel_user
@@ -52,7 +51,7 @@ authorization dependent by _XLUser
   update;
   delete;
   field ( readonly ) EndUser, FileId, Line_No,
-  PoNumber, PoItem, GrQuantity, UnitOfMeasure, SiteId, HeaderText;
+   GrQuantity, UnitOfMeasure, SiteId, HeaderText;  // PoNumber, PoItem,
   field ( numbering : managed, readonly ) Line_Id;
   association _XLUser { with draft; }
 

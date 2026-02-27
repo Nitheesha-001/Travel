@@ -43,6 +43,30 @@ CLASS lhc_XLHead IMPLEMENTATION.
 
   METHOD fillfilestatus.
 
+    DATA: lv_time TYPE timestampl.
+    GET TIME STAMP FIELD lv_time.
+
+*// File Status
+    READ ENTITIES OF zuj_excel_user_i IN LOCAL MODE
+    ENTITY XLHead
+    ALL FIELDS WITH
+    CORRESPONDING #( keys )
+    RESULT DATA(lt_excel).
+
+    " Update File Status
+    LOOP AT lt_excel INTO DATA(ls_excel).
+      MODIFY ENTITIES OF zuj_excel_user_i IN LOCAL MODE
+      ENTITY XLHead
+      UPDATE FIELDS ( FileStatus LocalLastChangedBy LastChangedAt  )
+      WITH VALUE #( ( %tky = lS_excel-%tky
+                      %data-FileStatus = 'File not selected'
+                      %data-LocalLastChangedBy  = cl_abap_context_info=>get_user_technical_name( )
+                      %data-LastChangedAt  = lv_time
+                     %control-FileStatus = if_abap_behv=>mk-on
+                     %control-LocalLastChangedBy = if_abap_behv=>mk-on
+                     %control-LastChangedAt = if_abap_behv=>mk-on ) ).
+
+    ENDLOOP.
 
   ENDMETHOD.
 

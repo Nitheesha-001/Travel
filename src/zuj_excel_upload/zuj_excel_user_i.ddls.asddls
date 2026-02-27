@@ -13,6 +13,10 @@ define root view entity ZUJ_EXCEL_USER_I
   key end_user              as EndUser,
   key file_id               as FileId,
       file_status           as FileStatus,
+        @Semantics.largeObject: {
+                       mimeType: 'Mimetype',
+                       fileName: 'Filename',
+                       contentDispositionPreference: #INLINE}
       attachment            as Attachment,
       @Semantics.mimeType: true
       mimetype              as Mimetype,

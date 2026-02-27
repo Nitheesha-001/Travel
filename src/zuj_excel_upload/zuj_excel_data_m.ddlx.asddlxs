@@ -1,4 +1,12 @@
 @Metadata.layer: #CORE
+
+@UI.headerInfo:{
+            typeName: 'File Data',
+            typeNamePlural: 'File Data',
+            title:{ type: #STANDARD, value: 'EndUser' },
+            description:{ type: #STANDARD, value: 'FileId' }
+            }
+            
 annotate entity ZUJ_EXCEL_DATA_C with
 {
   @UI.facet: [{

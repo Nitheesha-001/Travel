@@ -9,13 +9,13 @@ define root view entity ZUJ_EXCEL_USER_C
   key EndUser,
   key FileId,
       FileStatus,
-      Attachment,
       @Semantics.largeObject: {
-          mimeType: 'Mimetype',
-          fileName: 'Filename',
-          acceptableMimeTypes: [
-              'application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','text/csv' ],
-          contentDispositionPreference: #INLINE}
+                 mimeType: 'Mimetype',
+                 fileName: 'Filename',
+                 acceptableMimeTypes: [
+                     'application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','text/csv' ],
+                 contentDispositionPreference: #ATTACHMENT}
+      Attachment,
       Mimetype,
       Filename,
       LocalCreatedBy,
@@ -24,5 +24,5 @@ define root view entity ZUJ_EXCEL_USER_C
       LocalLastChangedAt,
       LastChangedAt,
       /* Associations */
-      _XLData: redirected to composition child ZUJ_EXCEL_DATA_C
+      _XLData : redirected to composition child ZUJ_EXCEL_DATA_C
 }

@@ -1,5 +1,5 @@
 @EndUserText.label: 'Service Definition for Excel'
 define service ZUJ_EXCEL_SD {
-  expose ZUJ_EXCEL_USER_C;
-  expose ZUJ_EXCEL_DATA_C;
+  expose ZUJ_EXCEL_USER_C as XLHead;
+  expose ZUJ_EXCEL_DATA_C as XLData;
 }
