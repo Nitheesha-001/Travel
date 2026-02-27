@@ -8,6 +8,8 @@ CLASS lhc_XLHead DEFINITION INHERITING FROM cl_abap_behavior_handler.
       IMPORTING REQUEST requested_authorizations FOR XLHead RESULT result.
     METHODS fillfilestatus FOR DETERMINE ON MODIFY
       IMPORTING keys FOR XLHead~fillfilestatus.
+    METHODS FileSelectedStatus FOR DETERMINE ON MODIFY
+      IMPORTING keys FOR XLHead~FileSelectedStatus.
 
     METHODS earlynumbering_create FOR NUMBERING
       IMPORTING entities FOR CREATE XLHead.
@@ -62,11 +64,16 @@ CLASS lhc_XLHead IMPLEMENTATION.
                       %data-FileStatus = 'File not selected'
                       %data-LocalLastChangedBy  = cl_abap_context_info=>get_user_technical_name( )
                       %data-LastChangedAt  = lv_time
-                     %control-FileStatus = if_abap_behv=>mk-on
-                     %control-LocalLastChangedBy = if_abap_behv=>mk-on
-                     %control-LastChangedAt = if_abap_behv=>mk-on ) ).
+                      %control-FileStatus = if_abap_behv=>mk-on
+                      %control-LocalLastChangedBy = if_abap_behv=>mk-on
+                      %control-LastChangedAt = if_abap_behv=>mk-on ) ).
 
     ENDLOOP.
+
+  ENDMETHOD.
+
+  METHOD FileSelectedStatus.
+
 
   ENDMETHOD.
 

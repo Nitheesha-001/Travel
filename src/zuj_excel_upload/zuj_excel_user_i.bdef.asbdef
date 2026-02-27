@@ -24,6 +24,7 @@ etag master LocalLastChangedAt
   draft determine action Prepare;
 
   determination fillfilestatus on modify { field EndUser;}
+  determination FileSelectedStatus on modify { field Attachment; }
 
   mapping for zuj_excel_user
     {

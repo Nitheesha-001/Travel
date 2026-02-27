@@ -12,8 +12,9 @@ define root view entity ZUJ_EXCEL_USER_C
       @Semantics.largeObject: {
                  mimeType: 'Mimetype',
                  fileName: 'Filename',
-                 acceptableMimeTypes: [
-                     'application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','text/csv' ],
+                 acceptableMimeTypes: ['*/*'],
+//                 acceptableMimeTypes: [
+//                     'application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','text/csv' ],
                  contentDispositionPreference: #ATTACHMENT}
       Attachment,
       Mimetype,
