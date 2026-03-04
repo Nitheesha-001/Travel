@@ -1,6 +1,7 @@
 projection;
 strict ( 2 );
 use draft;
+use side effects;
 
 define behavior for ZUJ_EXCEL_USER_C alias XLHead
 {
@@ -8,7 +9,8 @@ define behavior for ZUJ_EXCEL_USER_C alias XLHead
   use update;
   use delete;
 
-//use action
+  use action UploadExcelData;
+
   use action Activate;
   use action Discard;
   use action Edit;

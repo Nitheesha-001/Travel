@@ -12,6 +12,13 @@ define root view entity ZUJ_EXCEL_USER_I
 {
   key end_user              as EndUser,
   key file_id               as FileId,
+//   case $projection.FileStatus
+//    when 'FAILED'         then 1   /* red    */
+//    when 'PENDING'        then 2   /* yellow */
+//    when 'FILE_SELECTED'  then 5   /* blue   */
+//    when 'UPLOADED'       then 3   /* green  */
+//    else 0                        /* gray   */
+//  end as FileStatusCriticality,
       file_status           as FileStatus,
         @Semantics.largeObject: {
                        mimeType: 'Mimetype',

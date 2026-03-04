@@ -23,8 +23,16 @@ etag master LocalLastChangedAt
   draft action Resume;
   draft determine action Prepare;
 
-  determination fillfilestatus on modify { field EndUser;}
+  // Upload Excel Data
+  action UploadExcelData result [1] $self;
+  determination fillfilestatus on modify { field EndUser; }
   determination FileSelectedStatus on modify { field Attachment; }
+
+  side effects
+  {
+    field Attachment affects $self, field FileStatus;
+    action uploadExcelData affects $self, messages;
+  }
 
   mapping for zuj_excel_user
     {
@@ -52,7 +60,7 @@ authorization dependent by _XLUser
   update;
   delete;
   field ( readonly ) EndUser, FileId, Line_No,
-   GrQuantity, UnitOfMeasure, SiteId, HeaderText;  // PoNumber, PoItem,
+  PoNumber, PoItem, GrQuantity, UnitOfMeasure, SiteId, HeaderText;
   field ( numbering : managed, readonly ) Line_Id;
   association _XLUser { with draft; }
 

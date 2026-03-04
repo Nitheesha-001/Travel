@@ -18,6 +18,7 @@ annotate entity ZUJ_EXCEL_DATA_C with
     }]
 
   @UI.hidden: true
+
   EndUser;
   @UI.hidden: true
   FileId;
@@ -36,11 +37,14 @@ annotate entity ZUJ_EXCEL_DATA_C with
   @UI.lineItem: [{ position: 50, label: 'Quantity' }]
   @UI.identification: [{ position: 50, label: 'Quantity' }]
   GrQuantity;
-  @UI.hidden: true
+ @UI.lineItem: [{ position: 50, label: 'UnitOfMeasure' }]
+  @UI.identification: [{ position: 50, label: 'UnitOfMeasure' }]
   UnitOfMeasure;
-  @UI.hidden: true
+@UI.lineItem: [{ position: 60, label: 'SiteId' }]
+  @UI.identification: [{ position: 60, label: 'SiteId' }]
   SiteId;
-  @UI.hidden: true
+ @UI.lineItem: [{ position: 70, label: 'HeaderText' }]
+  @UI.identification: [{ position: 70, label: 'HeaderText' }]
   HeaderText;
   /* Associations */
   @UI.hidden: true
