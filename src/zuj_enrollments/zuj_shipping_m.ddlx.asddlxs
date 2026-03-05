@@ -1,0 +1,45 @@
+@Metadata.layer: #CORE
+annotate entity ZUJ_SHIPPING_C with
+{
+
+@UI.facet: [{ id: 'Shipping',
+                purpose: #STANDARD,
+                type: #IDENTIFICATION_REFERENCE,
+                label: 'Shipping',
+                position: 10
+                },
+
+                {
+                id: 'Address',
+                purpose: #STANDARD,
+                type: #LINEITEM_REFERENCE,
+                targetElement: '_Addr',
+                label: 'Address',
+                position: 20
+   }]
+
+  @UI.hidden: true
+  ShippingUuid;
+  @UI.hidden: true
+  EnrollUuid;
+  @UI:{ lineItem: [{ position:10, importance:#HIGH, label: 'Serial' }] }
+  @UI:{ identification: [{position:10, importance:#HIGH, label: 'Serial' }] }
+  Serial;
+  @UI:{ lineItem: [{ position:20, importance:#HIGH, label: 'Addrnumber' }] }
+  @UI:{ identification: [{position:20, importance:#HIGH, label: 'Addrnumber' }] }
+  Addrnumber;
+  @UI:{ lineItem: [{ position:30, importance:#HIGH, label: 'BP Number' }] }
+  @UI:{ identification: [{position:30, importance:#HIGH, label: 'BP Number' }] }
+  Bpnumber;
+  @UI:{ lineItem: [{ position:40, importance:#HIGH, label: 'Model' }] }
+  @UI:{ identification: [{position:40, importance:#HIGH, label: 'Model' }] }
+  Model;
+  @UI:{ lineItem: [{ position:50, importance:#HIGH, label: 'Active' }] }
+  @UI:{ identification: [{position:50, importance:#HIGH, label: 'Active' }] }
+  Active;
+  //    LocalLastChangedAt;
+  //    /* Associations */
+  //    _Addr;
+  //    _Enroll;
+
+}

@@ -1,0 +1,6 @@
+@EndUserText.label: 'Service Definition for Enrollment'
+define service ZUJ_ENROLL_SD {
+  expose ZUJ_ENROLL_C;
+  expose ZUJ_SHIPPING_C;
+  expose ZUJ_ADDRESS_C;
+}

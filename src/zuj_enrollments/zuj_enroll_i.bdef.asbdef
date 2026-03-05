@@ -1,0 +1,104 @@
+managed implementation in class zbp_uj_enroll_i unique;
+strict ( 2 );
+
+with draft;
+define behavior for ZUJ_ENROLL_I alias Enroll
+persistent table zuj_enroll
+draft table zuj_enroll_d
+lock master
+total etag LastChangedAt
+authorization master ( global, instance )
+etag master LocalLastChangedAt
+{
+  create ( authorization : global );
+  update;
+  delete;
+  field ( numbering : managed, readonly ) EnrollUuid;
+  association _Ship { create; with draft; }
+
+  draft action Edit;
+  draft action Resume;
+  draft action Discard;
+  draft action Activate optimized;
+  draft determine action Prepare;
+
+  mapping for zuj_enroll
+    {
+      EnrollUuid         = enroll_uuid;
+      Bpnumber           = bpnumber;
+      Serial             = serial;
+      Model              = model;
+      Brrefresh          = brrefresh;
+      Country            = country;
+      Createdon          = createdon;
+      Cancelledon        = cancelledon;
+      Status             = status;
+      Suspendstart       = suspendstart;
+      Suspendend         = suspendend;
+      LocalCreatedBy     = local_created_by;
+      LocalCreatedAt     = local_created_at;
+      LocalLastChangedBy = local_last_changed_by;
+      LocalLastChangedAt = local_last_changed_at;
+      LastChangedAt      = last_changed_at;
+    }
+}
+
+define behavior for ZUJ_SHIPPING_I alias Shipping
+persistent table zuj_shipping
+draft table zuj_shipping_d
+lock dependent by _Enroll
+authorization dependent by _Enroll
+etag master LocalLastChangedAt
+{
+  update;
+  delete;
+  field ( numbering : managed, readonly ) ShippingUuid;
+  association _Enroll { with draft; }
+  association _Addr { create; with draft; }
+  field ( readonly : update ) EnrollUuid;
+
+
+  mapping for zuj_shipping
+    {
+      ShippingUuid       = shipping_uuid;
+      EnrollUuid         = parent_uuid;
+      Serial             = serial;
+      Addrnumber         = addrnumber;
+      Bpnumber           = bpnumber;
+      Model              = model;
+      Active             = active;
+      LocalLastChangedAt = local_last_changed_at;
+    }
+}
+
+define behavior for ZUJ_ADDRESS_I alias Address
+persistent table zuj_address
+draft table zuj_address_d
+lock dependent by _Enroll
+authorization dependent by _Enroll
+etag master LocalLastChangedAt
+{
+  update;
+  delete;
+  field ( numbering : managed, readonly ) AddrnumberUuid;
+  association _Enroll { with draft; }
+  association _Ship { with draft; }
+
+  field ( readonly : update ) EnrollUuid;
+  field ( readonly : update ) ShippingUuid;
+
+  mapping for zuj_address
+    {
+      AddrnumberUuid     = addrnumber_uuid;
+      EnrollUuid         = root_uuid;
+      ShippingUuid       = parent_uuid;
+      Addrnumber         = addrnumber;
+      Street1            = street1;
+      Street2            = street2;
+      City               = city;
+      State              = state;
+      Country            = country;
+      Zipcode            = zipcode;
+      LocalLastChangedAt = local_last_changed_at;
+    }
+}

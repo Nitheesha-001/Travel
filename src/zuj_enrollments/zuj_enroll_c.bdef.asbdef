@@ -1,0 +1,36 @@
+projection;
+strict ( 2 );
+use draft;
+
+define behavior for ZUJ_ENROLL_C alias Enroll
+{
+  use create;
+  use update;
+  use delete;
+
+  use action Edit;
+  use action Resume;
+  use action Discard;
+  use action Activate;
+  use action Prepare;
+
+  use association _Ship { create; with draft; }
+}
+
+define behavior for ZUJ_SHIPPING_C alias Shipping
+{
+  use update;
+  use delete;
+
+  use association _Enroll { with draft; }
+  use association _Addr { create; with draft; }
+}
+
+define behavior for ZUJ_ADDRESS_C alias Address
+{
+  use update;
+  use delete;
+
+  use association _Enroll { with draft; }
+  use association _Ship { with draft; }
+}

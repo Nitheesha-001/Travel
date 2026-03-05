@@ -1,0 +1,66 @@
+@Metadata.layer: #CORE
+
+@UI:{ headerInfo:{ typeName: 'Enroll',
+                   typeNamePlural: 'Enrollments',
+                   title:{ type: #STANDARD,value: 'Bpnumber' } },
+presentationVariant: [{ sortOrder: [{ by: 'Bpnumber',direction: #ASC }] }] }
+
+annotate entity ZUJ_ENROLL_C with
+{
+
+@UI.facet: [{ id:'Enroll',
+               purpose: #STANDARD,
+               type: #IDENTIFICATION_REFERENCE,
+               label: 'Enroll',
+               position: 10
+              },
+
+             {
+             id: 'Shipping',
+             purpose: #STANDARD,
+             type: #LINEITEM_REFERENCE,
+             targetElement: '_Ship',
+             label:'Shipping',
+             position: 20 }]
+
+  @UI.hidden: true
+  EnrollUuid;
+  @UI:{ lineItem: [{ position:10, importance:#HIGH, label: 'BP Number' }] }
+  @UI:{ identification: [{position:10, importance:#HIGH, label: 'BP Number' }] }
+  Bpnumber;
+  @UI:{ lineItem: [{ position:20, importance:#HIGH, label: 'Serial' }] }
+  @UI:{ identification: [{position:20, importance:#HIGH, label: 'Serial' }] }
+  Serial;
+  @UI:{ lineItem: [{ position:30, importance:#HIGH, label: 'Model' }] }
+  @UI:{ identification: [{position:30, importance:#HIGH, label: 'Model' }] }
+  Model;
+  @UI:{ lineItem: [{ position:40, importance:#HIGH, label: 'BR Refresh' }] }
+  @UI:{ identification: [{position:40, importance:#HIGH, label: 'BR Refresh' }] }
+  Brrefresh;
+  @UI:{ lineItem: [{ position:50, importance:#HIGH, label: 'Country' }] }
+  @UI:{ identification: [{position:50, importance:#HIGH, label: 'Country' }] }
+  Country;
+  @UI:{ lineItem: [{ position:60, importance:#HIGH, label: 'Createdon' }] }
+  @UI:{ identification: [{position:60, importance:#HIGH, label: 'Createdon' }] }
+  Createdon;
+  @UI:{ lineItem: [{ position:70, importance:#HIGH, label: 'Changedon' }] }
+  @UI:{ identification: [{position:70, importance:#HIGH, label: 'Changedon' }] }
+  cancelledon ;
+  @UI:{ lineItem: [{ position:80, importance:#HIGH, label: 'Status' }] }
+  @UI:{ identification: [{position:80, importance:#HIGH, label: 'Status' }] }
+  Status;
+  @UI:{ lineItem: [{ position:90, importance:#HIGH, label: 'Suspendstart' }] }
+  @UI:{ identification: [{position:90, importance:#HIGH, label: 'Suspendstart' }] }
+  Suspendstart;
+  @UI:{ lineItem: [{ position:100, importance:#HIGH, label: 'Suspendend' }] }
+  @UI:{ identification: [{position:100, importance:#HIGH, label: 'Suspendend' }] }
+  Suspendend;
+//  LocalCreatedBy;
+//  LocalCreatedAt;
+//  LocalLastChangedBy;
+//  LocalLastChangedAt;
+//  LastChangedAt;
+//  /* Associations */
+//  _Ship;
+
+}

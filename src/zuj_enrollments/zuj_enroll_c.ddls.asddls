@@ -13,7 +13,7 @@ define root view entity ZUJ_ENROLL_C
       Brrefresh,
       Country,
       Createdon,
-      Changedon,
+      Cancelledon ,
       Status,
       Suspendstart,
       Suspendend,
